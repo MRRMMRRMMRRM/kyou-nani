@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>今日は何をする日</title>
+<meta name="description" content="毎日一枚カードを引いて、今日することを決めるページ。役には立たないけれど、いつもの景色が少し違って見えるお題が出ます。">
+<meta name="theme-color" content="#f2f8f0">
+
+<!-- ▼ リポジトリ名を変えたら、この4か所の「kyou-nani」を新しい名前に直す -->
+<link rel="canonical" href="https://mrrmmrrmmrrm.github.io/kyou-nani/">
+<meta property="og:url" content="https://mrrmmrrmmrrm.github.io/kyou-nani/">
+<meta property="og:image" content="https://mrrmmrrmmrrm.github.io/kyou-nani/ogp.png">
+<meta name="twitter:image" content="https://mrrmmrrmmrrm.github.io/kyou-nani/ogp.png">
+<!-- ▲ ここまで -->
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="今日は何をする日">
+<meta property="og:title" content="今日は何をする日">
+<meta property="og:description" content="毎日一枚カードを引いて、今日することを決めるページ。役には立たないけれど、いつもの景色が少し違って見えるお題が出ます。">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="伏せられたカードが扇形に並び、「今日は何をする日」と縦書きで添えられた画像">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="今日は何をする日">
+<meta name="twitter:description" content="毎日一枚カードを引いて、今日することを決めるページ。">
+
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="今日は何をする日">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap">
+<style>
+/* 一画面。曜日の色が背景でにじみ、右上に縦書きの名前。
+   中央に伏せたカードの扇。引いたカードは中央に残り、その日はずっとそのまま。 */
+@property --haze { syntax: '<color>'; inherits: true; initial-value: #f2f8f0; }
+@property --c1   { syntax: '<color>'; inherits: true; initial-value: #96cc8e; }
+@property --c2   { syntax: '<color>'; inherits: true; initial-value: #c4e3bb; }
+@property --c3   { syntax: '<color>'; inherits: true; initial-value: #e5f2df; }
+@property --c4   { syntax: '<color>'; inherits: true; initial-value: #d6e59c; }
+@property --ink  { syntax: '<color>'; inherits: true; initial-value: #24452a; }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --haze: #f2f8f0;
+  --c1: #96cc8e; --c2: #c4e3bb; --c3: #e5f2df; --c4: #d6e59c;
+  --ink: #24452a;
+  --paper: #fdfcfa;
+  --x1: 35%; --y1: 30%; --x2: 65%; --y2: 68%; --x3: 68%; --y3: 32%; --x4: 36%; --y4: 72%;
+
+  --font-mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+
+  --fw: min(24vw, 112px, 17vh);   /* 扇のカードの幅 */
+  --sw: min(60vw, 280px, 44vh);   /* 引いたカードの幅 */
+  --hand-b: 38%;
+  --stage-y: 46%;
+
+  color-scheme: light;
+  transition: --haze 1.4s ease, --c1 1.4s ease, --c2 1.4s ease, --c3 1.4s ease, --c4 1.4s ease, --ink 1.4s ease;
+}
+
+html { height: 100%; overflow: hidden; }
+body {
+  height: 100%; margin: 0; overflow: hidden;
+  background: var(--haze); color: var(--ink);
+  font-family: var(--font-mincho);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none; user-select: none;
+}
+
+/* ---------- 背景のにじみ ---------- */
+.sky { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; background: var(--haze); }
+.sky i { position: absolute; display: block; }
+.b { border-radius: 50%; filter: blur(30px); will-change: transform; }
+.b1 { width: 90vmax; height: 90vmax; left: -34vmax; top: -38vmax; background: radial-gradient(circle, var(--c1) 0%, transparent 64%); opacity: .9; animation: drift1 38s ease-in-out infinite alternate; }
+.b2 { width: 84vmax; height: 84vmax; right: -32vmax; bottom: -36vmax; background: radial-gradient(circle, var(--c2) 0%, transparent 64%); opacity: .95; animation: drift2 46s ease-in-out infinite alternate; }
+.b3 { width: 62vmax; height: 62vmax; right: -18vmax; top: -6vmax; background: radial-gradient(circle, var(--c3) 0%, transparent 66%); animation: drift3 52s ease-in-out infinite alternate; }
+.b4 { width: 48vmax; height: 48vmax; left: -14vmax; bottom: -4vmax; background: radial-gradient(circle, var(--c4) 0%, transparent 64%); opacity: .7; animation: drift2 40s ease-in-out infinite alternate-reverse; }
+.wash { inset: 0; background: radial-gradient(ellipse 62% 52% at 50% 52%, color-mix(in srgb, var(--haze) 72%, transparent), transparent 78%); }
+.grain {
+  inset: 0; pointer-events: none; opacity: .22; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .4 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes drift1 { to { transform: translate(9vmax, 7vmax) scale(1.08); } }
+@keyframes drift2 { to { transform: translate(-8vmax, -6vmax) scale(1.1); } }
+@keyframes drift3 { to { transform: translate(-6vmax, 9vmax) scale(.94); } }
+
+/* ---------- 画面 ---------- */
+.scene {
+  position: relative; z-index: 1; height: 100%;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+.mark {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 28px);
+  right: max(22px, calc(env(safe-area-inset-right, 0px) + 10px));
+  writing-mode: vertical-rl; margin: 0;
+}
+.mark h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: .38em; line-height: 1; }
+.mark .date { margin: 0; margin-block-start: 14px; font-size: 12px; letter-spacing: .3em; line-height: 1; opacity: .72; }
+
+/* ---------- カードの裏面（扇と、引いたカードで共通） ---------- */
+.back-design {
+  background:
+    radial-gradient(120% 90% at 20% 0%, #ffffff 0%, transparent 60%),
+    linear-gradient(165deg, var(--paper), color-mix(in srgb, var(--c3) 70%, var(--paper)));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 9%, transparent);
+}
+.back-design::before {
+  content: ""; position: absolute; inset: 7%;
+  border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); border-radius: 5px;
+}
+.back-design::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 20%; aspect-ratio: 1;
+  translate: -50% -50%; border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, var(--c3), var(--c1) 75%);
+  box-shadow: 0 0 10px 2px color-mix(in srgb, var(--c1) 45%, transparent);
+  opacity: .9;
+}
+
+/* ---------- 扇（手札） ---------- */
+.hand {
+  position: absolute; left: calc(50% - var(--fw) * 1.7); width: calc(var(--fw) * 3.4);
+  bottom: var(--hand-b); height: calc(var(--fw) * 1.4 + 30px);
+  touch-action: none;
+}
+.fcard {
+  --lift: 0px;
+  position: absolute; bottom: 0; left: calc(50% - var(--fw) / 2);
+  width: var(--fw); height: calc(var(--fw) * 1.4);
+  padding: 0; border: 0; border-radius: 9px; overflow: hidden; cursor: pointer;
+  touch-action: none;
+  transform-origin: 50% 230%;
+  transform: rotate(var(--a)) translateY(var(--lift));
+  transition: transform .32s cubic-bezier(.3,.7,.3,1), opacity .5s ease, box-shadow .32s ease;
+  transition-delay: calc(var(--i) * 55ms);
+  box-shadow:
+    0 8px 22px color-mix(in srgb, var(--ink) 13%, transparent),
+    0 1px 2px color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.hand:not(.dealt) .fcard { transform: rotate(0deg) translateY(28px); opacity: 0; }
+.hand.settled .fcard { transition-delay: 0s; }
+.fcard.is-lifted, .fcard:focus-visible {
+  --lift: -18px;
+  box-shadow:
+    0 16px 30px color-mix(in srgb, var(--ink) 18%, transparent),
+    0 2px 4px color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.fcard:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.hint {
+  position: absolute; left: 0; right: 0; bottom: calc(var(--hand-b) - 66px);
+  margin: 0; text-align: center; font-size: 13px; letter-spacing: .32em; padding-left: .32em;
+  opacity: .8;
+}
+
+/* ---------- 引いたカード ---------- */
+.stage {
+  position: absolute;
+  left: calc(50% - var(--sw) / 2);
+  top: calc(var(--stage-y) - var(--sw) * .7);
+  width: var(--sw); height: calc(var(--sw) * 1.4);
+  perspective: 1400px;
+  will-change: transform;
+}
+.flipper { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.face {
+  position: absolute; inset: 0; border-radius: 14px; overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  box-shadow:
+    0 22px 48px color-mix(in srgb, var(--ink) 16%, transparent),
+    0 2px 6px color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.face.back { transform: rotateY(180deg); }
+/* めくり終えたら平面に戻す（立体のままだと、Safariで文字が描画から落ちることがある） */
+.stage.is-open .flipper { transform-style: flat; }
+.stage.is-open .face { backface-visibility: visible; -webkit-backface-visibility: visible; }
+.stage.is-open .face.back { display: none; }
+.face.front { background: color-mix(in srgb, var(--c3) 75%, #ffffff); }
+.bloom {
+  position: absolute; inset: -30%;
+  background:
+    radial-gradient(46% 36% at var(--x1) var(--y1), var(--c1), transparent 74%),
+    radial-gradient(48% 40% at var(--x2) var(--y2), var(--c2), transparent 74%),
+    radial-gradient(30% 26% at var(--x3) var(--y3), var(--c4), transparent 72%),
+    radial-gradient(50% 40% at var(--x4) var(--y4), var(--c3), transparent 76%);
+  filter: blur(16px);
+}
+.face .grain { position: absolute; opacity: .2; mix-blend-mode: normal; }
+
+.odai {
+  position: absolute; top: 10%; right: 11%; margin: 0;
+  writing-mode: vertical-rl;
+  font-size: calc(var(--sw) * .082); font-weight: 500;
+  line-height: 2; letter-spacing: .16em;
+  color: var(--ink);
+}
+.odai .ln { display: block; }
+.stamp {
+  position: absolute; left: 10%; bottom: 8%; margin: 0;
+  writing-mode: vertical-rl;
+  font-size: calc(var(--sw) * .045); letter-spacing: .32em; line-height: 1;
+  opacity: .7;
+}
+
+/* 文字は行ごとに動かさず、右の行から左へ、にじむように現れる */
+.odai.inking {
+  -webkit-mask-image: linear-gradient(to left, #000 0%, #000 42%, transparent 58%, transparent 100%);
+          mask-image: linear-gradient(to left, #000 0%, #000 42%, transparent 58%, transparent 100%);
+  -webkit-mask-size: 240% 100%; mask-size: 240% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  animation: inkwipe var(--ink-ms, 1800ms) cubic-bezier(.35,.1,.3,1) both;
+}
+@keyframes inkwipe {
+  from { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
+  to   { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+}
+.stamp.inking { animation: stampin .9s ease-out var(--stamp-delay, 0ms) both; }
+@keyframes stampin { from { opacity: 0; } to { opacity: .7; } }
+
+/* ---------- 宣言（シェア） ---------- */
+.share {
+  position: absolute; left: 0; right: 0;
+  top: calc(var(--stage-y) + var(--sw) * .7 + 26px);
+  padding-inline: 16px;
+  display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px;
+}
+.share-x, .share-copy {
+  font-family: var(--font-mincho); line-height: 1; letter-spacing: .18em;
+  text-decoration: none; cursor: pointer; border-radius: 999px;
+  padding: 12px 20px 12px calc(20px + .18em);
+}
+.share-x {
+  font-size: 14px; font-weight: 500; color: #ffffff;
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
+  border: 1px solid transparent;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--ink) 18%, transparent);
+}
+.share-x:hover { background: var(--ink); }
+.share-copy {
+  font-size: 13px; color: var(--ink);
+  background: color-mix(in srgb, #ffffff 50%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.share-x:focus-visible, .share-copy:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.sharetext {
+  flex-basis: 100%; margin: 4px 0 0; text-align: center;
+  font-size: 12px; line-height: 1.7; white-space: pre-line; word-break: break-all;
+  -webkit-user-select: text; user-select: text;
+}
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.noscript { position: relative; z-index: 2; margin: 0; padding: 40vh 24px 0; text-align: center; font-size: 14px; letter-spacing: .1em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .b { animation: none; }
+  .odai.inking, .stamp.inking { animation: none; -webkit-mask-image: none; mask-image: none; }
+  .fcard { transition-duration: .01s; transition-delay: 0s; }
+}
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true">
+  <i class="b b1"></i><i class="b b2"></i><i class="b b3"></i><i class="b b4"></i>
+  <i class="wash"></i><i class="grain"></i>
+</div>
+
+<main class="scene">
+  <header class="mark">
+    <h1>今日は何をする日</h1>
+    <p class="date" id="date"></p>
+  </header>
+
+  <div class="hand" id="hand" role="group" aria-label="伏せられたカード"></div>
+  <p class="hint" id="hint" hidden>一枚、引いてください。</p>
+
+  <div class="stage" id="stage" role="group" aria-label="今日のお題" hidden>
+    <div class="flipper" id="flipper">
+      <div class="face front">
+        <div class="bloom"></div>
+        <i class="grain"></i>
+        <p class="odai" id="odai"></p>
+        <p class="stamp" id="stamp"></p>
+      </div>
+      <div class="face back back-design"></div>
+    </div>
+  </div>
+  <div class="share" id="share" hidden>
+    <a class="share-x" id="shareX" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener">Xで宣言する</a>
+    <button type="button" class="share-copy" id="shareCopy">文をコピー</button>
+    <p class="sharetext" id="shareText" hidden></p>
+  </div>
+  <p class="sr" id="live" aria-live="polite"></p>
+  <noscript><p class="noscript">このページはJavaScriptを使います。</p></noscript>
+</main>
+
+<script>
+/* ==========================================================
+   お題
+   ・「／」で改行します（縦書きなので、1行は10文字くらいまで）
+   ・お題を足すときは、いちばん下に新しいまとまりを足して、
+     from に「明日以降」の日付を書きます。
+     今のひと巡りが終わったあとから、新しいお題も混ざります。
+     （今日・明日のお題は変わりません）
+   ・お題を消したいときは、消さずに別の文に書き換えてください。
+     行を消すと、出る順番がずれます。
+   ========================================================== */
+const ODAI = [
+  { from: "2026-10-24", list: [
+    "自分の足音を、／十歩ぶんだけ聴く。",
+    "影がいちばん／長いものを探す。",
+    "五分だけ、／スマホを見ないで／過ごす。",
+    "今日見た看板で、／いちばん好きな／文字の形を決める。",
+    "階段の段数を／数える。",
+    "目を閉じて、／聞こえる音を三つ、／聞き分ける。",
+    "丸いものを／三つ探す。",
+    "今日の空に／名前をつける。",
+    "今日いちばん／静かだった瞬間を／覚えておく。",
+    "今日いちばん／好きな緑を選ぶ。",
+    "いつも通る角に／名前をつける。",
+    "いちばん古そうな／ものを探す。",
+    "今日いちばん／明るかった瞬間を／覚えておく。",
+    "横断歩道の／白線を数える。",
+    "三十分、／スマホを鞄の／奥にしまう。",
+    "誰かの靴を見て、／その人の行き先を／想像する。",
+    "雨が降ったら、／傘に当たる音を／聴く。",
+    "自分の部屋を、／初めて来た人の目で／見る。",
+    "スマホを一時間、／裏返して置く。",
+    "自分の声を録音して／聴く。",
+    "青いものを／五つ探す。",
+    "見えるなかで、／いちばん遠いものを／探す。",
+    "鳥の声を二種類、／聞き分ける。",
+    "外に出て、／最初に感じた／においを言葉にする。",
+    "胸に手を当てて、／鼓動を十回数える。",
+    "前を歩く人の／名前を想像する。",
+    "今日の雲が、／明日どこにいるか／考える。",
+    "スマホを見ずに、／いまの時刻を当てる。",
+    "電車で一駅ぶん、／スマホを出さない。",
+    "寝る前の十分、／スマホを別の部屋に／置く。",
+    "月が出ていたら、／その形を覚えておく。",
+    "今日いちばん／冷たかった風を／覚えておく。",
+    "見えるなかで、／いちばん高い建物を／探す。",
+    "数字の「７」を／三回見つける。",
+    "いちばん小さな音を／探す。",
+    "今日いちばん／おいしかった一口を／覚えておく。",
+    "利き手じゃないほうで／歯をみがく。",
+    "いつもの駅を、／はじめて来た／旅行者の目で見る。",
+    "聞こえてきた／メロディに、／勝手に歌詞をつける。",
+    "見かけた動物に／名前をつける。",
+    "鳥になったつもりで、／今いる場所を／上から想像する。",
+    "ごはんのあいだ、／スマホを見ない。",
+    "次の待ち時間は、／スマホを出さずに／過ごす。",
+    "夕方、／街灯がつく瞬間を／探す。",
+    "今日の空の色を、／誰かに伝える。",
+    "十年後の自分が／思い出しそうな／今日の場面を／一つ決める。"
+  ]},
+  // { from: "2026-12-01", list: [
+  //   "新しいお題を／ここに書く。",
+  // ]},
+];
+
+// 曜日の色（曜日の名前から）：日＝太陽、月＝月明かり、火＝赤、水＝水色、木＝緑、金＝金色、土＝土色
+const PALETTES = [
+  { haze: "#fdf4ea", c1: "#f5a058", c2: "#f9cd8c", c3: "#fde8c8", c4: "#f6b09c", ink: "#5c3a1c" }, // 日
+  { haze: "#f4f4f9", c1: "#bfc1e0", c2: "#dadbee", c3: "#eeeef7", c4: "#ece3c0", ink: "#36385a" }, // 月
+  { haze: "#fcf0ee", c1: "#e9766a", c2: "#f3aea4", c3: "#fadbd5", c4: "#f4b48a", ink: "#5e2a25" }, // 火
+  { haze: "#f1f7fb", c1: "#7dbbe6", c2: "#b6daf2", c3: "#e0f0fa", c4: "#a6dfdb", ink: "#1f405a" }, // 水
+  { haze: "#f2f8f0", c1: "#96cc8e", c2: "#c4e3bb", c3: "#e5f2df", c4: "#d6e59c", ink: "#24452a" }, // 木
+  { haze: "#fcf8e8", c1: "#e6bf55", c2: "#f1d98d", c3: "#faf0c9", c4: "#f0c888", ink: "#54441a" }, // 金
+  { haze: "#f7f2ec", c1: "#c69c78", c2: "#dec1a4", c3: "#efe2d4", c4: "#b6ab8c", ink: "#4a3626" }  // 土
+];
+
+(() => {
+  const N = 7, SPREAD = 8, DAY = 86400000;
+  const KD = ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+  const WD = ["日", "月", "火", "水", "木", "金", "土"];
+  const STORE = "kyou-nani-suru-hi";
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const $ = id => document.getElementById(id);
+  const hand = $("hand"), hint = $("hint"), stage = $("stage"), flipper = $("flipper");
+  const odaiEl = $("odai"), stampEl = $("stamp"), dateEl = $("date"), share = $("share");
+  const shareX = $("shareX"), shareCopy = $("shareCopy"), shareText = $("shareText"), live = $("live");
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+  const localDay = d => Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY);
+  const parseDay = s => { const [y, m, d] = s.split("-").map(Number); return Math.floor(Date.UTC(y, m - 1, d) / DAY); };
+  const fromDay = n => { const u = new Date(n * DAY); return { m: u.getUTCMonth() + 1, d: u.getUTCDate(), w: u.getUTCDay() }; };
+  const kan = n => n < 10 ? KD[n] : (Math.floor(n / 10) === 1 ? "" : KD[Math.floor(n / 10)]) + "十" + (n % 10 ? KD[n % 10] : "");
+
+  function mulberry32(a) {
+    return () => {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  // ---- その日のお題（日付から決まる。全員共通） ----
+  // お題を「ひと巡り」ずつ並べ替えて出す。ひと巡りが終わるまで同じお題は出ない。
+  // ひと巡りの途中で足されたお題は、次のひと巡りから混ざる。
+  const BATCHES = ODAI.map(b => ({ day: parseDay(b.from), list: b.list })).sort((a, b) => a.day - b.day);
+  const START = BATCHES[0].day;
+  function odaiFor(day) {
+    day = Math.max(day, START);
+    let s = START, k = 0, prevLast = null;
+    for (;;) {
+      const pool = BATCHES.filter(b => b.day <= s).flatMap(b => b.list);
+      const L = pool.length;
+      const r = mulberry32((k * 1013904223 + 0x2f) >>> 0);
+      const order = [...Array(L).keys()];
+      for (let i = L - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+      if (L > 1 && pool[order[0]] === prevLast) [order[0], order[1]] = [order[1], order[0]];  // 巡りの変わり目で同じお題が続かないように
+      if (day < s + L) return pool[order[day - s]];
+      prevLast = pool[order[L - 1]];
+      s += L; k++;
+    }
+  }
+
+  // ---- 確認用：?date=2026-11-03 でその日を表示（記録はしない）、?reset で今日を引き直す ----
+  const q = new URLSearchParams(location.search);
+  const preview = /^\d{4}-\d{2}-\d{2}$/.test(q.get("date") || "") ? parseDay(q.get("date")) : null;
+
+  let drawn = {};
+  try { drawn = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { drawn = {}; }
+  const save = () => {
+    if (preview != null) return;
+    const keep = localDay(new Date()) - 7;
+    for (const k in drawn) if (+k < keep) delete drawn[k];
+    try { localStorage.setItem(STORE, JSON.stringify(drawn)); } catch (e) {}
+  };
+  if (q.has("reset")) {
+    delete drawn[localDay(new Date())]; save();
+    try { history.replaceState(null, "", location.pathname); } catch (e) {}
+  }
+  if (preview != null) drawn = {};
+
+  const SITE = /^https?:$/.test(location.protocol)
+    ? location.origin + location.pathname
+    : document.querySelector('link[rel="canonical"]').href;
+
+  let today = preview ?? localDay(new Date());
+  let seq = 0, drawing = false, lifted = null, settleTimer = 0, inkTimer = 0, shareMsg = "";
+  const running = [];
+  const track = a => (running.push(a), a);
+  const ok = async (a, my) => { try { await a.finished; } catch (e) { return false; } return my === seq; };
+
+  function cancelRunning() {
+    running.splice(0).forEach(a => { try { a.cancel(); } catch (e) {} });
+    flipper.style.transform = "";
+    clearTimeout(inkTimer);
+    [odaiEl, stampEl].forEach(l => { l.style.opacity = ""; l.classList.remove("inking"); });
+  }
+
+  function applyDay(day) {
+    const d = fromDay(day);
+    const p = PALETTES[d.w];
+    const st = document.documentElement.style;
+    for (const k in p) st.setProperty("--" + k, p[k]);
+    if (themeMeta) themeMeta.content = p.haze;
+    const r = mulberry32((day * 2654435761) >>> 0);
+    for (let i = 1; i <= 4; i++) {
+      st.setProperty("--x" + i, (28 + r() * 44).toFixed(1) + "%");
+      st.setProperty("--y" + i, (25 + r() * 50).toFixed(1) + "%");
+    }
+    dateEl.textContent = `${kan(d.m)}月${kan(d.d)}日　${WD[d.w]}曜日`;
+    stampEl.textContent = `${kan(d.m)}月${kan(d.d)}日`;
+
+    const lines = odaiFor(day).split("／").map(t => t.trim()).filter(Boolean);
+    const text = lines.join("");
+    odaiEl.replaceChildren(...lines.map(t => { const s = document.createElement("span"); s.className = "ln"; s.textContent = t; return s; }));
+    stage.setAttribute("aria-label", "今日のお題：" + text);
+
+    shareMsg = `今日は何をする日？\n${text}\n#今日は何をする日`;
+    shareX.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg) + "&url=" + encodeURIComponent(SITE);
+    shareText.textContent = shareMsg + "\n" + SITE; shareText.hidden = true;
+    shareCopy.textContent = "文をコピー";
+  }
+
+  function showHand() {
+    stage.hidden = true; share.hidden = true; hint.hidden = false;
+    hand.hidden = false;
+    hand.classList.remove("dealt", "settled");
+    hand.replaceChildren();
+    for (let i = 0; i < N; i++) {
+      const b = document.createElement("button");
+      const a = (i - (N - 1) / 2) * SPREAD;
+      b.type = "button"; b.id = "card-" + i; b.className = "fcard back-design";
+      b.dataset.i = i; b.dataset.a = a;
+      b.style.setProperty("--a", a + "deg");
+      b.style.setProperty("--i", i);
+      b.setAttribute("aria-label", `左から${i + 1}枚目を引く`);
+      hand.appendChild(b);
+    }
+    void hand.offsetWidth;
+    requestAnimationFrame(() => {
+      hand.classList.add("dealt");
+      settleTimer = setTimeout(() => hand.classList.add("settled"), 900);
+    });
+  }
+
+  function showRevealed(fade) {
+    hand.hidden = true; hand.replaceChildren(); hint.hidden = true;
+    stage.hidden = false; share.hidden = false;
+    stage.classList.add("is-open");
+    if (fade && !reduced) {
+      track(stage.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 900, easing: "ease-out" }));
+      track(share.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, delay: 300, easing: "ease-out", fill: "backwards" }));
+    }
+  }
+
+  function show(fade) {
+    seq++; drawing = false; lifted = null;
+    cancelRunning(); clearTimeout(settleTimer);
+    applyDay(today);
+    if (drawn[today] != null) showRevealed(fade); else showHand();
+  }
+
+  async function draw(card) {
+    if (drawing) return;
+    drawing = true;
+    const my = ++seq;
+    drawn[today] = +card.dataset.i; save();
+    live.textContent = stage.getAttribute("aria-label");
+
+    if (reduced) { showRevealed(true); drawing = false; return; }
+
+    const cards = [...hand.querySelectorAll(".fcard")];
+    const a = +card.dataset.a, idx = +card.dataset.i;
+    const startLift = card.classList.contains("is-lifted") ? -18 : 0;
+    cards.forEach(c => c.disabled = true);
+    track(hint.animate([{ opacity: .8 }, { opacity: 0 }], { duration: 300, fill: "forwards" }));
+
+    // 選ばれなかったカードは下へ沈む
+    cards.forEach((c, i) => {
+      if (c === card) return;
+      const ca = +c.dataset.a;
+      track(c.animate([
+        { transform: `rotate(${ca}deg) translateY(0px)`, opacity: 1 },
+        { transform: `rotate(${ca}deg) translateY(70px)`, opacity: 0 }
+      ], { duration: 560, delay: 120 + Math.abs(i - idx) * 50, easing: "cubic-bezier(.5,0,.75,0)", fill: "both" }));
+    });
+
+    // 1枚を抜き取る
+    const pull = track(card.animate([
+      { transform: `rotate(${a}deg) translateY(${startLift}px)` },
+      { transform: `rotate(${a}deg) translateY(-64px)` }
+    ], { duration: 460, easing: "cubic-bezier(.3,.7,.3,1)", fill: "forwards" }));
+    if (!(await ok(pull, my))) return;
+
+    // 抜いたカードを中央へ
+    const fr = card.getBoundingClientRect();
+    stage.hidden = false; share.hidden = true;
+    stage.classList.remove("is-open");
+    flipper.style.transform = "rotateY(180deg)";
+    const inks = [odaiEl, stampEl];
+    inks.forEach(l => l.style.opacity = "0");
+    const sr = stage.getBoundingClientRect();
+    const dx = fr.left + fr.width / 2 - (sr.left + sr.width / 2);
+    const dy = fr.top + fr.height / 2 - (sr.top + sr.height / 2);
+    const s = card.offsetWidth / stage.offsetWidth;
+    card.style.visibility = "hidden";
+    const fly = track(stage.animate([
+      { transform: `translate(${dx}px, ${dy}px) rotate(${a}deg) scale(${s})` },
+      { transform: "translate(0px, 0px) rotate(0deg) scale(1)" }
+    ], { duration: 860, easing: "cubic-bezier(.2,.75,.25,1)", fill: "both" }));
+    if (!(await ok(fly, my))) return;
+    hand.hidden = true;
+
+    // めくる
+    const flip = track(flipper.animate([
+      { transform: "rotateY(180deg) scale(1)" },
+      { transform: "rotateY(90deg) scale(1.05)", offset: .5 },
+      { transform: "rotateY(0deg) scale(1)" }
+    ], { duration: 1000, easing: "cubic-bezier(.45,.05,.25,1)", fill: "forwards" }));
+    flipper.style.transform = "";
+    if (!(await ok(flip, my))) return;
+
+    // めくり終えたら立体をたたむ
+    stage.classList.add("is-open");
+    flip.cancel(); fly.cancel();
+    drawing = false;
+
+    // 文字が右の行から順に現れる
+    const inkMs = 900 + odaiEl.children.length * 420;
+    odaiEl.style.setProperty("--ink-ms", inkMs + "ms");
+    stampEl.style.setProperty("--stamp-delay", (inkMs - 300) + "ms");
+    inks.forEach(l => { l.style.opacity = ""; l.classList.add("inking"); });
+    inkTimer = setTimeout(() => inks.forEach(l => l.classList.remove("inking")), inkMs + 700);
+
+    // 文字が出そろってから、宣言ボタンを出す
+    share.hidden = false;
+    track(share.animate([
+      { opacity: 0, transform: "translateY(6px)" },
+      { opacity: 1, transform: "none" }
+    ], { duration: 900, delay: inkMs + 600, easing: "ease-out", fill: "backwards" }));
+  }
+
+  // 指が乗っているカードを少し浮かせる（ババ抜きの迷い）
+  function cardAt(x, y) {
+    const cards = hand.querySelectorAll(".fcard");
+    if (!cards.length) return null;
+    const r = hand.getBoundingClientRect();
+    const H = cards[0].offsetHeight, W = cards[0].offsetWidth;
+    const px = r.left + r.width / 2, py = r.bottom + H * 1.3;   // 扇の要（回転の中心）
+    const dx = x - px, dy = py - y;
+    const dist = Math.hypot(dx, dy);
+    const ang = Math.atan2(dx, dy);
+    // 重なりの上（右側）のカードから順に、指が実際に乗っているカードを探す
+    for (let i = cards.length - 1; i >= 0; i--) {
+      const t = ang - (+cards[i].dataset.a) * Math.PI / 180;
+      const across = dist * Math.sin(t), along = dist * Math.cos(t);
+      const lift = cards[i].classList.contains("is-lifted") ? 18 : 0;
+      if (Math.abs(across) <= W / 2 && along >= H * 1.3 - 4 && along <= H * 2.3 + lift + 4) return cards[i];
+    }
+    return null;
+  }
+  function setLift(c) {
+    if (lifted === c) return;
+    if (lifted) lifted.classList.remove("is-lifted");
+    lifted = c;
+    if (c) c.classList.add("is-lifted");
+  }
+
+  hand.addEventListener("pointermove", e => { if (!drawing) setLift(cardAt(e.clientX, e.clientY)); });
+  hand.addEventListener("pointerdown", e => { if (!drawing) setLift(cardAt(e.clientX, e.clientY)); });
+  hand.addEventListener("pointerup", e => {
+    if (drawing) return;
+    const c = cardAt(e.clientX, e.clientY);
+    if (c) draw(c); else setLift(null);
+  });
+  hand.addEventListener("pointerleave", e => { if (e.pointerType === "mouse" && !drawing) setLift(null); });
+  hand.addEventListener("pointercancel", () => { if (!drawing) setLift(null); });
+  hand.addEventListener("click", e => {
+    if (e.detail !== 0 || drawing) return;  // キーボード操作のときだけ
+    const c = e.target.closest(".fcard");
+    if (c) draw(c);
+  });
+
+  shareCopy.addEventListener("click", () => {
+    const fallback = () => {
+      shareText.hidden = false;
+      const r = document.createRange(); r.selectNodeContents(shareText);
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      shareCopy.textContent = "下の文を選んでコピー";
+    };
+    try {
+      navigator.clipboard.writeText(shareMsg + "\n" + SITE).then(() => { shareCopy.textContent = "コピーしました"; }, fallback);
+    } catch (e) { fallback(); }
+  });
+
+  // 開いたまま日付が変わったら、新しい日のカードを配る
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden || preview != null) return;
+    const t = localDay(new Date());
+    if (t !== today) { today = t; show(true); }
+  });
+
+  show(true);
+})();
+</script>
+</body>
+</html>
