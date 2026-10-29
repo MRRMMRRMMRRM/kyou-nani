@@ -305,69 +305,7 @@ body {
 </main>
 
 <script>
-/* ==========================================================
-   お題
-   ・「／」で改行します（縦書きなので、1行は10文字くらいまで）
-   ・お題を足すときは、いちばん下に新しいまとまりを足して、
-     from に「明日以降」の日付を書きます。
-     今のひと巡りが終わったあとから、新しいお題も混ざります。
-     （今日・明日のお題は変わりません）
-   ・お題を消したいときは、消さずに別の文に書き換えてください。
-     行を消すと、出る順番がずれます。
-   ========================================================== */
-const ODAI = [
-  { from: "2026-10-24", list: [
-    "自分の足音を、／十歩ぶんだけ聴く。",
-    "影がいちばん／長いものを探す。",
-    "五分だけ、／スマホを見ないで／過ごす。",
-    "今日見た看板で、／いちばん好きな／文字の形を決める。",
-    "階段の段数を／数える。",
-    "目を閉じて、／聞こえる音を三つ、／聞き分ける。",
-    "丸いものを／三つ探す。",
-    "今日の空に／名前をつける。",
-    "今日いちばん／静かだった瞬間を／覚えておく。",
-    "今日いちばん／好きな緑を選ぶ。",
-    "いつも通る角に／名前をつける。",
-    "いちばん古そうな／ものを探す。",
-    "今日いちばん／明るかった瞬間を／覚えておく。",
-    "横断歩道の／白線を数える。",
-    "三十分、／スマホを鞄の／奥にしまう。",
-    "誰かの靴を見て、／その人の行き先を／想像する。",
-    "雨が降ったら、／傘に当たる音を／聴く。",
-    "自分の部屋を、／初めて来た人の目で／見る。",
-    "スマホを一時間、／裏返して置く。",
-    "自分の声を録音して／聴く。",
-    "青いものを／五つ探す。",
-    "見えるなかで、／いちばん遠いものを／探す。",
-    "鳥の声を二種類、／聞き分ける。",
-    "外に出て、／最初に感じた／においを言葉にする。",
-    "胸に手を当てて、／鼓動を十回数える。",
-    "前を歩く人の／名前を想像する。",
-    "今日の雲が、／明日どこにいるか／考える。",
-    "スマホを見ずに、／いまの時刻を当てる。",
-    "電車で一駅ぶん、／スマホを出さない。",
-    "寝る前の十分、／スマホを別の部屋に／置く。",
-    "月が出ていたら、／その形を覚えておく。",
-    "今日いちばん／冷たかった風を／覚えておく。",
-    "見えるなかで、／いちばん高い建物を／探す。",
-    "数字の「７」を／三回見つける。",
-    "いちばん小さな音を／探す。",
-    "今日いちばん／おいしかった一口を／覚えておく。",
-    "利き手じゃないほうで／歯をみがく。",
-    "いつもの駅を、／はじめて来た／旅行者の目で見る。",
-    "聞こえてきた／メロディに、／勝手に歌詞をつける。",
-    "見かけた動物に／名前をつける。",
-    "鳥になったつもりで、／今いる場所を／上から想像する。",
-    "ごはんのあいだ、／スマホを見ない。",
-    "次の待ち時間は、／スマホを出さずに／過ごす。",
-    "夕方、／街灯がつく瞬間を／探す。",
-    "今日の空の色を、／誰かに伝える。",
-    "十年後の自分が／思い出しそうな／今日の場面を／一つ決める。"
-  ]},
-  // { from: "2026-12-01", list: [
-  //   "新しいお題を／ここに書く。",
-  // ]},
-];
+/* お題は odai.json にあります（アプリと共通）。足し方は README.md を見てください。 */
 
 // 曜日の色（曜日の名前から）：日＝太陽、月＝月明かり、火＝赤、水＝水色、木＝緑、金＝金色、土＝土色
 const PALETTES = [
@@ -407,25 +345,32 @@ const PALETTES = [
     };
   }
 
-  // ---- その日のお題（日付から決まる。全員共通） ----
-  // お題を「ひと巡り」ずつ並べ替えて出す。ひと巡りが終わるまで同じお題は出ない。
-  // ひと巡りの途中で足されたお題は、次のひと巡りから混ざる。
-  const BATCHES = ODAI.map(b => ({ day: parseDay(b.from), list: b.list })).sort((a, b) => a.day - b.day);
-  const START = BATCHES[0].day;
-  function odaiFor(day) {
-    day = Math.max(day, START);
-    let s = START, k = 0, prevLast = null;
-    for (;;) {
-      const pool = BATCHES.filter(b => b.day <= s).flatMap(b => b.list);
-      const L = pool.length;
-      const r = mulberry32((k * 1013904223 + 0x2f) >>> 0);
-      const order = [...Array(L).keys()];
-      for (let i = L - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
-      if (L > 1 && pool[order[0]] === prevLast) [order[0], order[1]] = [order[1], order[0]];  // 巡りの変わり目で同じお題が続かないように
-      if (day < s + L) return pool[order[day - s]];
-      prevLast = pool[order[L - 1]];
-      s += L; k++;
+  // ---- お題を引く（引いた人ごとにランダム） ----
+  // ひと巡りするまで同じお題は出ない。odai.json の from の日になったお題から出る。
+  let BATCHES = [];   // odai.json を読んでから入る
+  const SEEN = "kyou-nani-seen";   // このひと巡りで出たお題
+  function poolFor(day) {
+    const p = [...new Set(BATCHES.filter(b => b.day <= day).flatMap(b => b.list))];
+    return p.length ? p : BATCHES[0].list;
+  }
+  function pickOdai(day) {
+    const pool = poolFor(day);
+    let seen = [];
+    try { seen = JSON.parse(localStorage.getItem(SEEN)) || []; } catch (e) { seen = []; }
+    if (!Array.isArray(seen)) seen = [];
+    const last = seen[seen.length - 1];
+    seen = seen.filter(o => pool.includes(o));
+    let cands = pool.filter(o => !seen.includes(o));
+    if (!cands.length) {                // ひと巡りしたら最初から。直前のお題は続けて出さない
+      seen = [];
+      cands = pool.length > 1 ? pool.filter(o => o !== last) : pool;
     }
+    const o = cands[Math.floor(Math.random() * cands.length)];
+    if (preview == null) {
+      seen.push(o);
+      try { localStorage.setItem(SEEN, JSON.stringify(seen)); } catch (e) {}
+    }
+    return o;
   }
 
   // ---- 確認用：?date=2026-11-03 でその日を表示（記録はしない）、?reset で今日を引き直す ----
@@ -434,6 +379,8 @@ const PALETTES = [
 
   let drawn = {};
   try { drawn = JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { drawn = {}; }
+  // 記録は { i: 引いたカード, o: お題 }。お題のない古い形の記録は使わない
+  for (const k in drawn) if (!drawn[k] || typeof drawn[k].o !== "string") delete drawn[k];
   const save = () => {
     if (preview != null) return;
     const keep = localDay(new Date()) - 7;
@@ -476,8 +423,10 @@ const PALETTES = [
     }
     dateEl.textContent = `${kan(d.m)}月${kan(d.d)}日　${WD[d.w]}曜日`;
     stampEl.textContent = `${kan(d.m)}月${kan(d.d)}日`;
+  }
 
-    const lines = odaiFor(day).split("／").map(t => t.trim()).filter(Boolean);
+  function setOdai(odai) {
+    const lines = odai.split("／").map(t => t.trim()).filter(Boolean);
     const text = lines.join("");
     odaiEl.replaceChildren(...lines.map(t => { const s = document.createElement("span"); s.className = "ln"; s.textContent = t; return s; }));
     stage.setAttribute("aria-label", "今日のお題：" + text);
@@ -490,6 +439,7 @@ const PALETTES = [
 
   function showHand() {
     stage.hidden = true; share.hidden = true; hint.hidden = false;
+    hint.textContent = "一枚、引いてください。";
     hand.hidden = false;
     hand.classList.remove("dealt", "settled");
     hand.replaceChildren();
@@ -524,14 +474,24 @@ const PALETTES = [
     seq++; drawing = false; lifted = null;
     cancelRunning(); clearTimeout(settleTimer);
     applyDay(today);
-    if (drawn[today] != null) showRevealed(fade); else showHand();
+    if (drawn[today]) { setOdai(drawn[today].o); showRevealed(fade); }
+    else if (BATCHES.length) showHand();
+    else showError();
+  }
+
+  function showError() {
+    hand.hidden = true; stage.hidden = true; share.hidden = true;
+    hint.textContent = "お題を読み込めませんでした。少し待って、開き直してください。";
+    hint.hidden = false;
   }
 
   async function draw(card) {
     if (drawing) return;
     drawing = true;
     const my = ++seq;
-    drawn[today] = +card.dataset.i; save();
+    const odai = pickOdai(today);
+    drawn[today] = { i: +card.dataset.i, o: odai }; save();
+    setOdai(odai);
     live.textContent = stage.getAttribute("aria-label");
 
     if (reduced) { showRevealed(true); drawing = false; return; }
@@ -667,7 +627,24 @@ const PALETTES = [
     if (t !== today) { today = t; show(true); }
   });
 
-  show(true);
+  // お題を読み込んでから始める（odai.json はアプリと共通）
+  // 読み込めなくても、今日もう引いていれば、そのカードは出す
+  (async () => {
+    try {
+      const res = await fetch("odai.json", { cache: "no-cache" });
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();
+      const bs = data.batches
+        .map(b => ({ day: parseDay(b.from), list: (b.list || []).filter(o => typeof o === "string" && o.trim()) }))
+        .filter(b => Number.isFinite(b.day) && b.list.length)
+        .sort((a, b) => a.day - b.day);
+      if (!bs.length) throw new Error("empty");
+      BATCHES = bs;
+    } catch (e) {
+      BATCHES = [];
+    }
+    show(true);
+  })();
 })();
 </script>
 </body>
