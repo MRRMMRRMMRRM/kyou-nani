@@ -1,4 +1,4 @@
-# 今日は何をする日
+# 今日なにする日
 
 毎日一枚カードを引いて、今日することを決めるページ。
 公開先：https://mrrmmrrmmrrm.github.io/kyou-nani/
@@ -11,6 +11,8 @@
 | odai.json | お題の一覧（Web版とアプリで共通） |
 | ogp.png | Xなどに URL を貼ったときに出るカード画像（1200×630） |
 | apple-touch-icon.png | ホーム画面に追加したときのアイコン、ブラウザのタブのアイコン |
+| privacy.html | アプリのプライバシーポリシー（App Store Connect の「プライバシーポリシー URL」） |
+| support.html | アプリのサポートページ（App Store Connect の「サポート URL」） |
 
 リポジトリ名を `kyou-nani` 以外にした場合は、index.html の上のほうにある
 「▼ リポジトリ名を変えたら」の4か所を新しい名前に直してください。

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>サポート｜今日なにする日</title>
+<meta name="description" content="iPhone・iPad アプリ「今日なにする日」のよくあるご質問と、お問い合わせ先です。">
+<meta name="theme-color" content="#f8f5f0">
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap">
+<style>
+/* 文書のページ。曜日の色がにじむ地の上に、紙を一枚置いて読む。 */
+:root {
+  --bg: #f8f5f0;
+  --paper: rgba(255, 255, 255, .78);
+  --ink: #3a3833;
+  --sub: #6b665d;
+  --line: rgba(58, 56, 51, .14);
+  --mark: #c98a5a;
+  --font: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 16px; line-height: 1.95;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(env(safe-area-inset-top, 0px) + 40px) calc(env(safe-area-inset-bottom, 0px) + 48px);
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40vmax 34vmax at 0% 0%, rgba(245, 160, 88, .38), transparent 70%),
+    radial-gradient(40vmax 34vmax at 100% 4%, rgba(125, 187, 230, .36), transparent 70%),
+    radial-gradient(42vmax 34vmax at 100% 100%, rgba(150, 204, 142, .32), transparent 70%),
+    radial-gradient(36vmax 30vmax at 20% 100%, rgba(233, 118, 106, .2), transparent 70%);
+  filter: blur(8px);
+}
+.doc {
+  max-width: 680px; margin: 0 auto;
+  background: var(--paper);
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(58, 56, 51, .08), 0 1px 3px rgba(58, 56, 51, .06);
+  padding: clamp(28px, 6vw, 56px) clamp(20px, 6vw, 56px);
+}
+.eyebrow { margin: 0; font-size: 13px; letter-spacing: .3em; color: var(--sub); }
+.eyebrow a { color: inherit; text-decoration: none; }
+.eyebrow a:hover { text-decoration: underline; }
+h1 { margin: 6px 0 0; font-size: clamp(24px, 5.5vw, 30px); font-weight: 600; letter-spacing: .12em; line-height: 1.5; text-wrap: balance; }
+.updated { margin: 10px 0 0; font-size: 13px; color: var(--sub); letter-spacing: .08em; }
+.lead { margin: 28px 0 0; }
+section { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); }
+h2 { display: flex; align-items: baseline; gap: 10px; margin: 0; font-size: 18px; font-weight: 600; letter-spacing: .08em; line-height: 1.6; }
+h2::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--mark); transform: translateY(-2px); }
+p { margin: 12px 0 0; }
+ul, ol { margin: 12px 0 0; padding-left: 1.4em; }
+li + li { margin-top: 6px; }
+.path { white-space: nowrap; }
+a { color: #8a5a3c; text-underline-offset: 3px; }
+.mail { font-size: 17px; letter-spacing: .02em; word-break: break-all; user-select: all; -webkit-user-select: all; }
+.note { font-size: 14px; color: var(--sub); }
+footer { max-width: 680px; margin: 24px auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; font-size: 13px; letter-spacing: .1em; }
+footer a { color: var(--sub); text-decoration: none; }
+footer a:hover, footer a:focus-visible { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<main class="doc">
+  <p class="eyebrow"><a href="./">今日なにする日</a></p>
+  <h1>サポート</h1>
+  <p class="updated">運営者：まいら</p>
+
+  <p class="lead">「今日なにする日」をご利用いただき、ありがとうございます。よくあるご質問をまとめました。</p>
+
+  <section>
+    <h2>カードを引き直したい</h2>
+    <p>カードを引けるのは、1日に1枚だけです。日付が変わると、新しいカードを引けます。</p>
+  </section>
+
+  <section>
+    <h2>友だちと同じお題が出ない</h2>
+    <p>お題は、カードを引いたときにランダムで決まるので、人によって違うお題が出ます。また、すべてのお題をひととおり引き終えるまで、同じお題は出ません。</p>
+  </section>
+
+  <section>
+    <h2>「ひとこと」を書くには</h2>
+    <p>次の3つの方法で書けます。</p>
+    <ul>
+      <li>今日画面で、引いたカードをタップする（カードが裏返って、書く画面が開きます）</li>
+      <li>夜のお知らせをタップする</li>
+      <li>左上のボタンからカレンダーを開き、日付をタップする</li>
+    </ul>
+    <p>書いた内容は、自動で保存されます。</p>
+  </section>
+
+  <section>
+    <h2>夜のお知らせが届かない</h2>
+    <p>夜のお知らせは、カードを引いた日の夜に1回だけ届きます。次の場合は届きません。</p>
+    <ul>
+      <li>その日のカードを引いていない</li>
+      <li>お知らせの時刻より前に、ひとことを書き終えている</li>
+      <li>お知らせの時刻を過ぎてから、カードを引いた</li>
+    </ul>
+    <p>それでも届かない場合は、次をご確認ください。</p>
+    <ul>
+      <li>カレンダー画面の右上の歯車から設定を開き、「夜のお知らせ」がオンになっているか</li>
+      <li>iPhone の「設定」→「通知」→「今日なにする日」で、通知が許可されているか</li>
+      <li>集中モードなどで、通知を止めていないか</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>これまでのお題とひとことを見たい</h2>
+    <p>左上のボタンからカレンダーを開くと、カードを引いた日に小さなカードが並びます。ひとことを書いた日には、インクの点が付きます。日付をタップすると、その日のお題とひとことを見られます。</p>
+  </section>
+
+  <section>
+    <h2>iPad など、ほかの端末に記録が出ない</h2>
+    <p>記録は iCloud を通じて、同じ Apple アカウントでサインインしている iPhone・iPad の間で共有されます。次をご確認ください。</p>
+    <ul>
+      <li>どちらの端末も、同じ Apple アカウントで iCloud にサインインしているか</li>
+      <li>「設定」→ 自分の名前 →「iCloud」の「iCloud を使用している App」で、「今日なにする日」がオンになっているか</li>
+    </ul>
+    <p>記録が届くまで、少し時間がかかることがあります。アプリを一度閉じて開き直すと、届くことがあります。</p>
+  </section>
+
+  <section>
+    <h2>機種変更をしたとき</h2>
+    <p>新しい端末で、前と同じ Apple アカウントで iCloud にサインインしてから本アプリを入れると、これまでの記録が戻ります。記録が届くまで、少し時間がかかることがあります。</p>
+  </section>
+
+  <section>
+    <h2>その他のお問い合わせ</h2>
+    <p>上記で解決しない場合や、ご意見・ご感想は、下記のメールアドレスまでご連絡ください。</p>
+    <p><a class="mail" href="mailto:myramyra9myramyra@gmail.com">myramyra9myramyra@gmail.com</a></p>
+    <p class="note">情報の取り扱いについては、<a href="privacy.html">プライバシーポリシー</a>をご覧ください。</p>
+  </section>
+</main>
+<footer>
+  <a href="./">今日なにする日</a>
+  <a href="support.html" aria-current="page">サポート</a>
+  <a href="privacy.html">プライバシーポリシー</a>
+</footer>
+</body>
+</html>

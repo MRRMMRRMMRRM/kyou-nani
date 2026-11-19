@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>今日は何をする日</title>
+<title>今日なにする日</title>
 <meta name="description" content="毎日一枚カードを引いて、今日することを決めるページ。役には立たないけれど、いつもの景色が少し違って見えるお題が出ます。">
 <meta name="theme-color" content="#f2f8f0">
 
@@ -16,19 +16,19 @@
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ja_JP">
-<meta property="og:site_name" content="今日は何をする日">
-<meta property="og:title" content="今日は何をする日">
+<meta property="og:site_name" content="今日なにする日">
+<meta property="og:title" content="今日なにする日">
 <meta property="og:description" content="毎日一枚カードを引いて、今日することを決めるページ。役には立たないけれど、いつもの景色が少し違って見えるお題が出ます。">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="伏せられたカードが扇形に並び、「今日は何をする日」と縦書きで添えられた画像">
+<meta property="og:image:alt" content="伏せられたカードが扇形に並び、「今日なにする日」と縦書きで添えられた画像">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="今日は何をする日">
+<meta name="twitter:title" content="今日なにする日">
 <meta name="twitter:description" content="毎日一枚カードを引いて、今日することを決めるページ。">
 
 <link rel="icon" type="image/png" href="apple-touch-icon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="今日は何をする日">
+<meta name="apple-mobile-web-app-title" content="今日なにする日">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -277,7 +277,7 @@ body {
 
 <main class="scene">
   <header class="mark">
-    <h1>今日は何をする日</h1>
+    <h1>今日なにする日</h1>
     <p class="date" id="date"></p>
   </header>
 
@@ -431,7 +431,7 @@ const PALETTES = [
     odaiEl.replaceChildren(...lines.map(t => { const s = document.createElement("span"); s.className = "ln"; s.textContent = t; return s; }));
     stage.setAttribute("aria-label", "今日のお題：" + text);
 
-    shareMsg = `今日は何をする日？\n${text}\n#今日は何をする日`;
+    shareMsg = `${text}\n#今日なにする日`;
     shareX.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg) + "&url=" + encodeURIComponent(SITE);
     shareText.textContent = shareMsg + "\n" + SITE; shareText.hidden = true;
     shareCopy.textContent = "文をコピー";
