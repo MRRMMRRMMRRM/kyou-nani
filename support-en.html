@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Support | What’s Today For?</title>
+<meta name="description" content="Common questions and contact information for the iPhone and iPad app “What’s Today For?”">
+<meta name="theme-color" content="#f8f5f0">
+<link rel="icon" type="image/png" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&display=swap">
+<style>
+/* 文書のページ。曜日の色がにじむ地の上に、紙を一枚置いて読む。 */
+:root {
+  --bg: #f8f5f0;
+  --paper: rgba(255, 255, 255, .78);
+  --ink: #3a3833;
+  --sub: #6b665d;
+  --line: rgba(58, 56, 51, .14);
+  --mark: #c98a5a;
+  --font: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 17px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: calc(env(safe-area-inset-top, 0px) + 40px) calc(env(safe-area-inset-bottom, 0px) + 48px);
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40vmax 34vmax at 0% 0%, rgba(245, 160, 88, .38), transparent 70%),
+    radial-gradient(40vmax 34vmax at 100% 4%, rgba(125, 187, 230, .36), transparent 70%),
+    radial-gradient(42vmax 34vmax at 100% 100%, rgba(150, 204, 142, .32), transparent 70%),
+    radial-gradient(36vmax 30vmax at 20% 100%, rgba(233, 118, 106, .2), transparent 70%);
+  filter: blur(8px);
+}
+.doc {
+  max-width: 680px; margin: 0 auto;
+  background: var(--paper);
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(58, 56, 51, .08), 0 1px 3px rgba(58, 56, 51, .06);
+  padding: clamp(28px, 6vw, 56px) clamp(20px, 6vw, 56px);
+}
+.eyebrow { margin: 0; font-size: 13px; letter-spacing: .12em; color: var(--sub); }
+.eyebrow a { color: inherit; text-decoration: none; }
+.eyebrow a:hover { text-decoration: underline; }
+h1 { margin: 6px 0 0; font-size: clamp(26px, 6vw, 32px); font-weight: 600; letter-spacing: .02em; line-height: 1.5; text-wrap: balance; }
+.updated { margin: 10px 0 0; font-size: 14px; color: var(--sub); letter-spacing: .02em; }
+.lead { margin: 28px 0 0; }
+section { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); }
+h2 { display: flex; align-items: baseline; gap: 10px; margin: 0; font-size: 19px; font-weight: 600; letter-spacing: .01em; line-height: 1.6; }
+h2::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--mark); transform: translateY(-2px); }
+p { margin: 12px 0 0; }
+ul, ol { margin: 12px 0 0; padding-left: 1.4em; }
+li + li { margin-top: 6px; }
+.path { white-space: nowrap; }
+a { color: #8a5a3c; text-underline-offset: 3px; }
+.mail { font-size: 17px; letter-spacing: .02em; word-break: break-all; user-select: all; -webkit-user-select: all; }
+.note { font-size: 14px; color: var(--sub); }
+footer { max-width: 680px; margin: 24px auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; font-size: 14px; letter-spacing: .03em; }
+footer a { color: var(--sub); text-decoration: none; }
+footer a:hover, footer a:focus-visible { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<main class="doc">
+  <p class="eyebrow"><a href="./">What’s Today For?</a></p>
+  <h1>Support</h1>
+  <p class="updated">Developer: <span class="path">まいら (MYRA)</span></p>
+
+  <p class="lead">Thank you for using “What’s Today For?” Here are answers to common questions.</p>
+
+  <section>
+    <h2>I want to draw again</h2>
+    <p>You can draw one card a day. When the date changes, you can draw a new card.</p>
+  </section>
+
+  <section>
+    <h2>My friend got a different prompt</h2>
+    <p>The prompt is chosen at random when you draw a card, so different people get different prompts. You won’t see the same prompt again until you have drawn all of them once.</p>
+  </section>
+
+  <section>
+    <h2>How do I write a note?</h2>
+    <p>There are three ways:</p>
+    <ul>
+      <li>On the Today screen, tap the card you drew. It flips over and opens the writing screen.</li>
+      <li>Tap the evening reminder.</li>
+      <li>Open the calendar with the button at the top left, then tap a day.</li>
+    </ul>
+    <p>Your note is saved automatically.</p>
+  </section>
+
+  <section>
+    <h2>The evening reminder doesn’t arrive</h2>
+    <p>The reminder arrives once, in the evening, on days you draw a card. It does not arrive when:</p>
+    <ul>
+      <li>You haven’t drawn a card that day</li>
+      <li>You finished writing your note before the reminder time</li>
+      <li>You drew the card after the reminder time</li>
+    </ul>
+    <p>If it still doesn’t arrive, please check:</p>
+    <ul>
+      <li>“Evening reminder” is on in Settings (the gear at the top right of the calendar)</li>
+      <li>Notifications are allowed in your iPhone’s Settings → Notifications → What’s Today</li>
+      <li>A Focus mode isn’t silencing notifications</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>I want to look back at past prompts and notes</h2>
+    <p>Open the calendar with the button at the top left. Small cards appear on the days you drew one, and an ink dot marks the days you wrote a note. Tap a day to see its prompt and note.</p>
+  </section>
+
+  <section>
+    <h2>My records don’t appear on my iPad or other devices</h2>
+    <p>Records are shared through iCloud between iPhones and iPads signed in with the same Apple Account. Please check:</p>
+    <ul>
+      <li>Both devices are signed in to iCloud with the same Apple Account</li>
+      <li>“What’s Today” is turned on in Settings → your name → iCloud, under the apps that use iCloud</li>
+    </ul>
+    <p>Records can take a little while to arrive. Closing and reopening the App may help.</p>
+  </section>
+
+  <section>
+    <h2>I got a new iPhone</h2>
+    <p>Sign in to iCloud on the new device with the same Apple Account, then install the App. Your records will come back. This can take a little while.</p>
+  </section>
+
+  <section>
+    <h2>Changing the App’s language</h2>
+    <p>The App appears in Japanese when your device is set to Japanese, and in English otherwise. To change only the App’s language, go to Settings → Apps → What’s Today → Language.</p>
+  </section>
+
+  <section>
+    <h2>Show today’s prompt on my Lock Screen</h2>
+    <p>Use the Lock Screen widget.</p>
+    <ol>
+      <li>Touch and hold the Lock Screen, then tap Customize.</li>
+      <li>Choose Lock Screen, then tap the widget area below (or above) the clock.</li>
+      <li>Choose What’s Today.</li>
+    </ol>
+    <p>Before you draw, it shows “Draw today’s card.” After you draw, it shows today’s prompt. Your notes are never shown.</p>
+  </section>
+
+  <section>
+    <h2>Post my card to X or other apps</h2>
+    <p>On the Today screen, tap Share. The share sheet opens with an image of your card and the prompt. Choose where to send it. If X doesn’t appear in the share sheet, check that the X app is installed.</p>
+  </section>
+
+  <section>
+    <h2>Other questions</h2>
+    <p>If your question isn’t answered here, or you have feedback, please email:</p>
+    <p><a class="mail" href="mailto:myramyra9myramyra@gmail.com">myramyra9myramyra@gmail.com</a></p>
+    <p class="note">For how we handle your information, see the <a href="privacy-en.html">privacy policy</a>.</p>
+  </section>
+</main>
+<footer>
+  <a href="support-en.html" aria-current="page">Support</a>
+  <a href="privacy-en.html">Privacy Policy</a>
+  <a href="support.html" lang="ja">日本語</a>
+</footer>
+</body>
+</html>

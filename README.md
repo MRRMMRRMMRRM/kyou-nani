@@ -13,6 +13,9 @@
 | apple-touch-icon.png | ホーム画面に追加したときのアイコン、ブラウザのタブのアイコン |
 | privacy.html | アプリのプライバシーポリシー（App Store Connect の「プライバシーポリシー URL」） |
 | support.html | アプリのサポートページ（App Store Connect の「サポート URL」） |
+| odai.en.json | 英語のお題の一覧（アプリの英語版が使う。形と順番は odai.json と同じ） |
+| privacy-en.html | 英語のプライバシーポリシー（App Store Connect の英語ページ用） |
+| support-en.html | 英語のサポートページ（App Store Connect の英語ページ用） |
 
 リポジトリ名を `kyou-nani` 以外にした場合は、index.html の上のほうにある
 「▼ リポジトリ名を変えたら」の4か所を新しい名前に直してください。
